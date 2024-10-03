@@ -1,0 +1,98 @@
+
+# dataset converted to dictionaries
+employee_data = [
+    {"Employee ID": "E02002", "Full Name": "Kai Le", "Job Title": "Controls Engineer", "Department": "Engineering",
+     "Business Unit": "Manufacturing", "Gender": "Male", "Ethnicity": "Asian", "Age": 47, "Hire Date": "02-05-2022",
+     "Annual Salary": "$92,368", "Bonus %": "0%", "Country": "United States", "City": "Columbus", "Exit Date": ""},
+    {"Employee ID": "E02003", "Full Name": "Robert Patel", "Job Title": "Analyst", "Department": "Sales",
+     "Business Unit": "Corporate", "Gender": "Male", "Ethnicity": "Asian", "Age": 58, "Hire Date": "10/23/2013",
+     "Annual Salary": "$45,703", "Bonus %": "0%", "Country": "United States", "City": "Chicago", "Exit Date": ""},
+    {"Employee ID": "E02004", "Full Name": "Cameron Lo", "Job Title": "Network Administrator", "Department": "IT",
+     "Business Unit": "Research & Development", "Gender": "Male", "Ethnicity": "Asian", "Age": 34, "Hire Date": "3/24/2019",
+     "Annual Salary": "$83,576", "Bonus %": "0%", "Country": "China", "City": "Shanghai", "Exit Date": ""},
+    # Add more records  dataset
+]
+
+# Creating in-memory collections
+collections = {}
+
+# Function Definitions
+
+# 1. createCollection
+def createCollection(collection_name):
+    collections[collection_name] = []
+    print(f"Collection '{collection_name}' created successfully.")
+
+# 2. indexData: Adds employee data excluding a specific column
+def indexData(collection_name, exclude_column):
+    if collection_name in collections:
+        data_to_insert = [
+            {k: v for k, v in record.items() if k != exclude_column} for record in employee_data
+        ]
+        collections[collection_name].extend(data_to_insert)
+        print(f"Data indexed into collection '{collection_name}', excluding column '{exclude_column}'.")
+    else:
+        print(f"Collection '{collection_name}' does not exist.")
+
+# 3. getEmpCount: Returns the count of employee records
+def getEmpCount(collection_name):
+    if collection_name in collections:
+        count = len(collections[collection_name])
+        print(f"Employee count in '{collection_name}': {count}")
+        return count
+    else:
+        print(f"Collection '{collection_name}' does not exist.")
+        return 0
+
+# 4. delEmpById: Deletes an employee by their ID
+def delEmpById(collection_name, employee_id):
+    if collection_name in collections:
+        collections[collection_name] = [
+            record for record in collections[collection_name] if record.get("Employee ID") != employee_id
+        ]
+        print(f"Employee with ID '{employee_id}' deleted from collection '{collection_name}'.")
+    else:
+        print(f"Collection '{collection_name}' does not exist.")
+
+# 5. searchByColumn: Searches employee records by a column value
+def searchByColumn(collection_name, column_name, column_value):
+    if collection_name in collections:
+        results = [
+            record for record in collections[collection_name] if record.get(column_name) == column_value
+        ]
+        print(f"Search results in '{collection_name}' where '{column_name}' = '{column_value}': {results}")
+        return results
+    else:
+        print(f"Collection '{collection_name}' does not exist.")
+        return []
+
+# 6. getDepFacet: Gets count of employees grouped by department
+def getDepFacet(collection_name):
+    if collection_name in collections:
+        department_counts = {}
+        for record in collections[collection_name]:
+            department = record.get("Department")
+            if department:
+                department_counts[department] = department_counts.get(department, 0) + 1
+        print(f"Department count in '{collection_name}': {department_counts}")
+        return department_counts
+    else:
+        print(f"Collection '{collection_name}' does not exist.")
+        return {}
+
+# Execute functions in the given order
+v_nameCollection = 'Hash_ChatGPT'
+v_phoneCollection = 'Hash_1234'
+
+createCollection(v_nameCollection)
+createCollection(v_phoneCollection)
+getEmpCount(v_nameCollection)
+indexData(v_nameCollection, 'Department')
+indexData(v_phoneCollection, 'Gender')
+delEmpById(v_nameCollection, 'E02003')
+getEmpCount(v_nameCollection)
+searchByColumn(v_nameCollection, 'Department', 'IT')
+searchByColumn(v_nameCollection, 'Gender', 'Male')
+searchByColumn(v_phoneCollection, 'Department', 'IT')
+getDepFacet(v_nameCollection)
+getDepFacet(v_phoneCollection)
